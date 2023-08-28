@@ -1,0 +1,49 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Rota {
+  id            String          @id @default(auto()) @map("_id") @db.ObjectId
+  nome          String
+  origem        Lugar
+  destino       Lugar
+  distancia     Float
+  duracao       Float
+  direcoes      Json
+  created_at    DateTime        @default(now())
+  updated_at    DateTime        @updatedAt
+  RotaMotorista RotaMotorista[]
+}
+
+model RotaMotorista {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  rota       Rota     @relation(fields: [id_rota], references: [id])
+  id_rota    String   @db.ObjectId
+  pontos     Ponto[]
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  // status: em planejamento, iniciada, finalizada
+}
+
+type Ponto {
+  localidade Coord
+  created_at DateTime @default(now())
+}
+
+type Lugar {
+  nome       String
+  localidade Coord
+}
+
+type Coord {
+  lat Float
+  lng Float
+}
