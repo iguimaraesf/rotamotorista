@@ -26,7 +26,7 @@ model Rota {
 model RotaMotorista {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
   rota       Rota     @relation(fields: [id_rota], references: [id])
-  id_rota    String   @db.ObjectId
+  id_rota    String   @db.ObjectId @unique
   pontos     Ponto[]
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
